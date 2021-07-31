@@ -1,0 +1,139 @@
+version: '2.0'
+session_config:
+  session_expiration_time: 120
+  carry_over_slots_to_new_session: true
+
+intents:
+- ask_exercise
+- stop
+- greet
+- goodbye
+- affirm
+- deny
+- mood_great
+- mood_unhappy
+- bot_challenge
+- ask_lower_stress
+- ask_eat_healthy
+- ask_better_sleep
+- inform
+- out_of_scope
+- thankyou
+
+
+slots:
+  confirm_exercise:
+    type: bool
+    influence_conversation: false
+  exercise:
+    type: text
+    influence_conversation: false
+  sleep:
+    type: text
+    influence_conversation: false
+  diet:
+    type: text
+    influence_conversation: false
+  stress:
+    type: text
+    influence_conversation: false
+  goal:
+    type: text
+    influence_conversation: false
+
+entities:
+  - exercise
+  - sleep
+  - stress
+
+responses:
+  utter_greet:
+  - text: Hi, its time for your daily wellness check, before we begin i would need some basic information, then we'll move forward from there.
+  utter_cheer_up:
+  - text: 'Here is something to cheer you up:'
+    image: https://i.imgur.com/nGF1K8f.jpg
+  utter_did_that_help:
+  - text: Did that help you?
+  utter_happy:
+  - text: Great, carry on!
+  utter_goodbye:
+  - text: Bye
+  utter_iamabot:
+  - text: I am a bot, powered by Rasa.
+  utter_stress_info:
+  - text: Its okay to feel overwhelmed sometimes, try to set realistic expectations and excercise time management techniques, like dividing large tasks into more manageble pieces. Relaxation techniques, like deep breathing and meditation
+  utter_exercise_info:
+  - text: Most healthy adults should aim to get about 150 min of moderate excercise per week. This includes activities like a brisk walk or yard work
+  utter_diet_info:
+  - text: Try to maintain a balances diet, whenever you feel like eating a snack ask yourself am i actulally hungry, your response should help you to decide
+  utter_sleep_better:
+  - text: Maintaining a regular sleeping schedule can be very helpful and should be the first step, other than that some dowm time before you actually go to sleep will be very helpful
+  utter_ask_confirm_exercise:
+  - text: "Did you exercise yesterday? Walks count too"
+  utter_ask_sleep:
+  - text: "how much sleep did you get last night"
+  utter_ask_exercise:
+  - text: "what kind of exercise did you do?"
+  utter_ask_diet:
+  - text: "did you stick to a healthy diet yesteday"
+  utter_ask_stress:
+  - text: "is your stress level low, medium or high"
+  utter_ask_goal:
+  - text: "setting goals, even small ones, is a great way to focus on your day. What do you want to accomplish today?"
+  utter_slots_value:
+  - text: "here is your daily wellness log\n
+  - Excercised?: {confirm_exercise}\n
+  - Type of Exercise: {exercise}\n
+  - Sleep: {sleep}\n
+  - Stuck to a healthy diet?: {diet}\n
+  - Stress level: {stress}\n
+  - Goal: {goal}"
+  utter_no_worries:
+  - text: "No problem :)"
+  utter_ask_continue:
+  - text: "Sorry, I don't quite understand. Do you want to continue?"
+
+forms:
+  health_form:
+
+    confirm_exercise:
+    - type: from_intent
+      intent: inform
+      value: true
+    - type: from_intent
+      intent: affirm
+      value: true
+    - type: from_intent
+      intent: deny
+      value: false
+
+    exercise:
+    - type: from_entity
+      entity: exercise
+
+    sleep: 
+    - type: from_entity
+      entity: sleep
+    - type: from_intent
+      entity: deny
+      value: "None"
+
+    diet:
+    - type: from_text
+      intent: inform
+    - type: from_text
+      intent: affirm
+    - type: from_text
+      intent: deny
+    
+    stress:
+    - type: from_entity
+      entity: stress
+
+    goal:
+    - type: from_text
+      intent: inform
+    
+actions:
+- validate_health_form
+  
